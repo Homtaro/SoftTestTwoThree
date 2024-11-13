@@ -13,6 +13,13 @@
             <column name="animal" type="VARCHAR(100)"/>
             <column name="quantity" type="INT"/>
         </createTable>
+
+
+       <!-- <sql>
+            ALTER TABLE animals_warehouse
+                ADD CONSTRAINT chk_quantity_non_negative CHECK (quantity >= 0);
+        </sql>-->
+
     </changeSet>
 
     <!--<changeSet id="2" author="postgres">
@@ -35,6 +42,13 @@
             <column name="quantity" type="INT"/>
             <column name="status" type="VARCHAR(20)"/>
         </createTable>
+
+
+        <!--<sql>
+            ALTER TABLE animals_orders
+                ADD CONSTRAINT chk_quantity_greater_than_zero CHECK (quantity > 0);
+        </sql>-->
+
     </changeSet>
 
     <changeSet id="3" author="postgres">
@@ -45,5 +59,21 @@
                 referencedColumnNames="id"
                 constraintName="fk_animal_id"/>
     </changeSet>
+
+    <changeSet id="4" author="postgres">
+         <sql>
+        ALTER TABLE animals_warehouse
+            ADD CONSTRAINT chk_quantity_non_negative CHECK (quantity >= 0);
+    </sql>
+    </changeSet>
+
+    <changeSet id="5" author="postgres">
+        <sql>
+            ALTER TABLE animals_orders
+                ADD CONSTRAINT chk_quantity_greater_than_zero CHECK (quantity > 0);
+        </sql>
+    </changeSet>
+
+
 
 </databaseChangeLog>

@@ -5,6 +5,8 @@ import com.example.softtest2.model.OrderStatus;
 import com.example.softtest2.service.AnimalOrderProcessingService;
 import com.example.softtest2.service.AnimalOrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +25,46 @@ public class AnimalOrderController {
 //        this.animalOrderService = animalOrderService;
 //    }
 
+// Standart quick order creation
+//    @PostMapping("/quickorder")
+//    public OrderStatus createQuickOrder(@RequestParam long animalId, @RequestParam int quantity) {
+//        return animalOrderService.createQuickOrder(animalId, quantity);
+//    }
 
+    //Created to fix tests error, quantity less than zero etc
+    //Created a new issue, even tho data isnt being written to the DB, ID still increments
+    /*@PostMapping("/quickorder")
+    public ResponseEntity<String> createQuickOrder(@RequestParam Long animalId, @RequestParam int quantity) {
+        try {
+            OrderStatus order = animalOrderService.createQuickOrder(animalId, quantity);
+            return ResponseEntity.ok("Order: " + order.toString());
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("CHK_QUANTITY_GREATER_THAN_ZERO")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantity value invalid.");
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data.");
+        }
+    }*/
+
+    //Fixed by adding a check for quantity value before creating an order
+    //Not clean solution, needs refactoring, but thats for later.
     @PostMapping("/quickorder")
-    public OrderStatus createQuickOrder(@RequestParam long animalId, @RequestParam int quantity) {
-        return animalOrderService.createQuickOrder(animalId, quantity);
+    public ResponseEntity<String> createQuickOrder(@RequestParam Long animalId, @RequestParam int quantity) {
+        try {
+            if (quantity <= 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantity value invalid.");
+            }
+            OrderStatus order = animalOrderService.createQuickOrder(animalId, quantity);
+            return ResponseEntity.ok("Order: " + order.toString());
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("CHK_QUANTITY_GREATER_THAN_ZERO")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantity value invalid.");
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid data.");
+        }
     }
+
+
 
 
     @PostMapping("/processorder")

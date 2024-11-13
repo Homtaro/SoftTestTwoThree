@@ -4,7 +4,9 @@ import com.example.softtest2.entity.AnimalOrderEntity;
 import com.example.softtest2.model.OrderStatus;
 import com.example.softtest2.repository.AnimalRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 @RequiredArgsConstructor
 @Component
@@ -32,7 +34,7 @@ public class NewStateExecutor implements BaseStateExecutor{
                     }
                 },
                 () -> {
-                    throw new RuntimeException("Animal not found");
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Animal not found");
                 }
         );
         return order.getStatus();
