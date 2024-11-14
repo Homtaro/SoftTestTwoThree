@@ -23,7 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 @AutoConfigureMockMvc
-@Sql("/test-data.sql")
+@Sql(value = "/test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_CLASS)
+@Sql(value = "/rollback-data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class OrderControllerIntegrationTest {
 
     @Autowired

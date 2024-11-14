@@ -5,6 +5,8 @@ import com.example.softtest2.state.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class AnimalOrderStateProvider {
@@ -14,7 +16,8 @@ public class AnimalOrderStateProvider {
     private final CompletedStateExecutor completedStateExecutor;
     private final CancelledStateExecutor cancelledStateExecutor;
 
-
+    //TODO check this out later
+    private final List<BaseStateExecutor> executorList;
 
     public BaseStateExecutor getState(OrderStatus orderStatus){
         switch (orderStatus){
