@@ -51,7 +51,7 @@ public class AnimalOrderServiceTest {
 
 
 
-        OrderStatus orderStatus = animalOrderService.createQuickOrder(1, 1);
+        OrderStatus orderStatus = animalOrderService.createQuickOrder(1, 1, 1);
         Mockito.verify(animalOrderRepo, Mockito.times(1)).save(any(AnimalOrderEntity.class));
         assertEquals(OrderStatus.NEW, orderStatus);
 

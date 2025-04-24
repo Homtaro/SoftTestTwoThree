@@ -27,11 +27,12 @@ public class AnimalOrderService {
     //Maybe there should be transactional, because its processing an order but not with
     // AnimalOrderProcessingService
     @Transactional
-    public OrderStatus createQuickOrder(long animalId, int quantity) {
+    public OrderStatus createQuickOrder(long animalId, int quantity, long userId) {
 
         AnimalOrderEntity animalOrder = new AnimalOrderEntity();
         animalOrder.setAnimalId(animalId);
         animalOrder.setQuantity(quantity);
+        animalOrder.setUserId(userId);
         animalOrder.setStatus(OrderStatus.NEW);
 
 
@@ -44,18 +45,6 @@ public class AnimalOrderService {
         return animalOrder.getStatus();
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -77,6 +66,14 @@ public class AnimalOrderService {
         return animalOrderRepo.findById(id).orElse(null);
     }
 
+
+    // Select List by user id
+
+    public List<AnimalOrderEntity> getAnimalOrdersByUserId(Long userId) {
+        return animalOrderRepo.findByUserId(userId);
+    }
+
+
     // Create a new animal order
 
     public AnimalOrderEntity createAnimalOrder(AnimalOrderEntity animalOrderEntity) {
@@ -93,6 +90,7 @@ public class AnimalOrderService {
                     animalOrder.setAnimalId(updatedAnimalOrder.getAnimalId());
                     animalOrder.setQuantity(updatedAnimalOrder.getQuantity());
                     animalOrder.setStatus(updatedAnimalOrder.getStatus());
+                    animalOrder.setUserId(updatedAnimalOrder.getUserId());
                     animalOrderRepo.save(animalOrder);
                 });
     }

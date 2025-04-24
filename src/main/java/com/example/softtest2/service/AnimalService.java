@@ -46,6 +46,7 @@ public class AnimalService {
                 .ifPresent(animal -> {
                     animal.setAnimal(updatedAnimal.getAnimal());
                     animal.setQuantity(updatedAnimal.getQuantity());
+                    animal.setDescription(updatedAnimal.getDescription());
                     animalRepo.save(animal);
                 });
     }

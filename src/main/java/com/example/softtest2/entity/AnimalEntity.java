@@ -22,6 +22,9 @@ public class AnimalEntity {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    @Column(name = "description", nullable = true)
+    private String description;
+
 //    @OneToMany(mappedBy = "animalEntity")
 //    private List<AnimalOrderEntity> orders;
 

@@ -47,7 +47,7 @@ public class AnimalOrderServiceIntegrationTest {
         //Redundant code, as the test-data.sql file already contains the data
 
         //Create a new order
-        animalOrderService.createQuickOrder(1, 10);
+        animalOrderService.createQuickOrder(1, 10, 1);
 
 
         List<AnimalOrderEntity> animalOrderEntities = animalOrderService.getAllAnimalOrders();

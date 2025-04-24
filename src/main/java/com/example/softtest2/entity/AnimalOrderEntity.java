@@ -28,6 +28,9 @@ public class AnimalOrderEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "animal_id", nullable = false, referencedColumnName = "id")
 //    private AnimalEntity animalEntity;

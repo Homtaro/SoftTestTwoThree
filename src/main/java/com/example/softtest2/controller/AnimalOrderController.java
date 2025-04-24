@@ -49,12 +49,12 @@ public class AnimalOrderController {
     //Fixed by adding a check for quantity value before creating an order
     //Not clean solution, needs refactoring, but thats for later.
     @PostMapping("/quickorder")
-    public ResponseEntity<String> createQuickOrder(@RequestParam Long animalId, @RequestParam int quantity) {
+    public ResponseEntity<String> createQuickOrder(@RequestParam Long animalId, @RequestParam int quantity, @RequestParam Long userId) {
         try {
             if (quantity <= 0) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Quantity value invalid.");
             }
-            OrderStatus order = animalOrderService.createQuickOrder(animalId, quantity);
+            OrderStatus order = animalOrderService.createQuickOrder(animalId, quantity, userId);
             return ResponseEntity.ok("Order: " + order.toString());
         } catch (DataIntegrityViolationException e) {
             if (e.getMessage().contains("CHK_QUANTITY_GREATER_THAN_ZERO")) {
@@ -65,19 +65,10 @@ public class AnimalOrderController {
     }
 
 
-
-
     @PostMapping("/processorder")
     public OrderStatus processOrder(@RequestParam long orderId) {
         return animalOrderProcessingService.processOrder(orderId);
     }
-
-
-
-
-
-
-
 
 
     ///////////////////////////////////////////////////////////////
@@ -100,6 +91,13 @@ public class AnimalOrderController {
     public AnimalOrderEntity getAnimalOrderById(Long id) {
         return animalOrderService.getAnimalOrderById(id);
     }
+
+    // Select all orders for a specific user
+    @GetMapping("/byuserid")
+    public List<AnimalOrderEntity> getAnimalOrdersByUserId(Long userId) {
+        return animalOrderService.getAnimalOrdersByUserId(userId);
+    }
+
 
     // Create a new animal order
     @PostMapping("/create")

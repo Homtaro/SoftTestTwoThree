@@ -19,4 +19,7 @@ public interface AnimalOrderRepo extends JpaRepository<AnimalOrderEntity, Long> 
     //Select by ID
     Optional<AnimalOrderEntity> findById(Long aLong);
 
+    //Select all orders for a specific user
+    List<AnimalOrderEntity> findByUserId(Long userId);
+
 }
