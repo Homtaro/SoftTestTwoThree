@@ -1,5 +1,6 @@
 package com.example.softtest2.controller;
 
+import com.example.softtest2.dto.AnimalOrderDTO;
 import com.example.softtest2.entity.AnimalOrderEntity;
 import com.example.softtest2.model.OrderStatus;
 import com.example.softtest2.service.AnimalOrderProcessingService;
@@ -78,6 +79,21 @@ public class AnimalOrderController {
     public List<AnimalOrderEntity> getAllAnimalOrders() {
         return animalOrderService.getAllAnimalOrders();
     }
+
+    //DTO STUFF
+
+    @GetMapping("/listdto")
+    public List<AnimalOrderDTO> getAllAnimalOrdersDTO() {
+        return animalOrderService.getOrdersDTO();
+    }
+
+
+
+
+
+
+    //DTO STUFF END
+
 
     // Select animal orders by animal name
     @GetMapping("/byanimalid")

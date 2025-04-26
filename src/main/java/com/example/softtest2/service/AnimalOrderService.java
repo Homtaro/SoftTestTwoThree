@@ -1,15 +1,21 @@
 package com.example.softtest2.service;
 
 import com.example.softtest2.AnimalOrderStateProvider;
+import com.example.softtest2.dto.AnimalOrderDTO;
+import com.example.softtest2.entity.AnimalEntity;
 import com.example.softtest2.entity.AnimalOrderEntity;
+import com.example.softtest2.entity.UserEntity;
 import com.example.softtest2.model.OrderStatus;
 import com.example.softtest2.repository.AnimalOrderRepo;
+import com.example.softtest2.repository.AnimalRepo;
+import com.example.softtest2.repository.UserRepo;
 import com.example.softtest2.state.BaseStateExecutor;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,6 +24,62 @@ public class AnimalOrderService {
 
     private final AnimalOrderRepo animalOrderRepo;
     private final AnimalOrderStateProvider animalOrderStateProvider;
+
+    //Stuff for DTO
+
+    @Autowired
+    private final AnimalRepo animalRepo;
+
+    @Autowired
+    private final UserRepo userRepo;
+
+
+    //Temp function to get DTO going
+
+    public List<AnimalOrderDTO> getOrdersDTO() {
+
+        List<AnimalOrderEntity> orders = animalOrderRepo.findAll();
+
+        List<AnimalOrderDTO> dtos = new ArrayList<>();
+
+        for (AnimalOrderEntity order : orders) {
+
+            AnimalEntity animal = animalRepo.findById(order.getAnimalId()).orElseThrow(
+                    () -> new RuntimeException("Animal not found"));
+
+            UserEntity user = userRepo.findById(order.getUserId()).orElseThrow(
+                    () -> new RuntimeException("User not found"));
+
+            dtos.add(toDTO(order, animal, user));
+        }
+
+        return dtos;
+    }
+
+
+
+    public AnimalOrderDTO toDTO(AnimalOrderEntity animalOrderEntity, AnimalEntity animalEntity,
+                                UserEntity userEntity) {
+
+        AnimalOrderDTO animalOrderDTO = new AnimalOrderDTO();
+
+        animalOrderDTO.setId(animalOrderEntity.getId());
+        animalOrderDTO.setAnimalId(animalOrderEntity.getAnimalId());
+        animalOrderDTO.setUserId(animalOrderEntity.getUserId());
+
+        animalOrderDTO.setQuantity(animalOrderEntity.getQuantity());
+        animalOrderDTO.setStatus(animalOrderEntity.getStatus().name());
+
+        animalOrderDTO.setAnimalName(animalEntity.getAnimal());
+        animalOrderDTO.setUserName(userEntity.getName()+" "+userEntity.getSurname());
+
+        return animalOrderDTO;
+
+    }
+
+
+
+
 
 //    @Autowired
 //    public AnimalOrderService(AnimalOrderRepo animalOrderRepo) {
@@ -45,6 +107,10 @@ public class AnimalOrderService {
         return animalOrder.getStatus();
 
     }
+
+
+
+
 
 
 
