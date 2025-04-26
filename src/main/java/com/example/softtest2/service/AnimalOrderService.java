@@ -10,13 +10,18 @@ import com.example.softtest2.repository.AnimalOrderRepo;
 import com.example.softtest2.repository.AnimalRepo;
 import com.example.softtest2.repository.UserRepo;
 import com.example.softtest2.state.BaseStateExecutor;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,25 +41,65 @@ public class AnimalOrderService {
 
     //Temp function to get DTO going
 
+//    public List<AnimalOrderDTO> getOrdersDTO() {
+//
+//        List<AnimalOrderEntity> orders = animalOrderRepo.findAll();
+//
+//        List<AnimalOrderDTO> dtos = new ArrayList<>();
+//
+//        for (AnimalOrderEntity order : orders) {
+//
+//            AnimalEntity animal = animalRepo.findById(order.getAnimalId()).orElseThrow(
+//                    () -> new RuntimeException("Animal not found"));
+//
+//            UserEntity user = userRepo.findById(order.getUserId()).orElseThrow(
+//                    () -> new RuntimeException("User not found"));
+//
+//            dtos.add(toDTO(order, animal, user));
+//        }
+//
+//        return dtos;
+//    }
+
+    // Maybe non temp DTO function, hope it works
+
+    @Transactional()
     public List<AnimalOrderDTO> getOrdersDTO() {
+        try {
+            List<AnimalOrderEntity> orders = animalOrderRepo.findAll();
+            List<AnimalOrderDTO> dtos = new ArrayList<>(orders.size());
 
-        List<AnimalOrderEntity> orders = animalOrderRepo.findAll();
+            Set<Long> animalIds = orders.stream()
+                    .map(AnimalOrderEntity::getAnimalId)
+                    .collect(Collectors.toSet());
+            Set<Long> userIds = orders.stream()
+                    .map(AnimalOrderEntity::getUserId)
+                    .collect(Collectors.toSet());
 
-        List<AnimalOrderDTO> dtos = new ArrayList<>();
+            Map<Long, AnimalEntity> animals = animalRepo.findAllById(animalIds).stream()
+                    .collect(Collectors.toMap(AnimalEntity::getId, a -> a));
+            Map<Long, UserEntity> users = userRepo.findAllById(userIds).stream()
+                    .collect(Collectors.toMap(UserEntity::getId, u -> u));
 
-        for (AnimalOrderEntity order : orders) {
+            for (AnimalOrderEntity order : orders) {
+                AnimalEntity animal = animals.get(order.getAnimalId());
+                UserEntity user = users.get(order.getUserId());
 
-            AnimalEntity animal = animalRepo.findById(order.getAnimalId()).orElseThrow(
-                    () -> new RuntimeException("Animal not found"));
+                if (animal == null) {
+                    throw new EntityNotFoundException("Animal not found: " + order.getId());
+                }
+                if (user == null) {
+                    throw new EntityNotFoundException("User not found: " + order.getId());
+                }
 
-            UserEntity user = userRepo.findById(order.getUserId()).orElseThrow(
-                    () -> new RuntimeException("User not found"));
-
-            dtos.add(toDTO(order, animal, user));
+                dtos.add(toDTO(order, animal, user));
+            }
+            return dtos;
+        } catch (Exception e) {
+            throw new ServiceException("Error fetching orders", e);
         }
-
-        return dtos;
     }
+
 
 
 

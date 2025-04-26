@@ -19,6 +19,25 @@ public class AnimalService {
     }
 
 
+    //DTO STUFF
+
+    public AnimalEntity toDTO(AnimalEntity animalEntity) {
+
+        AnimalEntity dto = new AnimalEntity();
+        dto.setId(animalEntity.getId());
+        dto.setAnimal(animalEntity.getAnimal());
+        dto.setQuantity(animalEntity.getQuantity());
+        dto.setDescription(animalEntity.getDescription());
+
+        return dto;
+
+    }
+
+
+
+
+    //DTO STUFF END
+
     //Select *
     public List<AnimalEntity> getAllAnimals() {
         return animalRepo.findAll();

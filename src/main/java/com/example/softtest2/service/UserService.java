@@ -20,6 +20,27 @@ public class UserService {
     }
 
 
+    //DTO STUFF
+
+    public UserEntity toDTO(UserEntity userEntity) {
+
+        UserEntity dto = new UserEntity();
+        dto.setId(userEntity.getId());
+        dto.setName(userEntity.getName());
+        dto.setSurname(userEntity.getSurname());
+        dto.setPhoneNumber(userEntity.getPhoneNumber());
+        dto.setAddress(userEntity.getAddress());
+
+        return dto;
+
+    }
+
+
+    //DTO STUFF END
+
+
+
+
     ///////---SELECT---////////
 
     //Select *
