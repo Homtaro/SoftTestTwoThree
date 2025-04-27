@@ -52,6 +52,8 @@ dependencies {
 
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
 
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
     //implementation 'org.webjars.npm:swagger-ui-dist:5.21.0'
 
 

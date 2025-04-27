@@ -132,6 +132,21 @@ public class AnimalOrderController {
         return animalOrderService.getOrdersDTO();
     }
 
+    @Operation(summary = "Secured endpoint for getting all animal orders as DTOs",
+            description = "Returns a list of all animal orders with extended information." +
+                    " This endpoint is secured and requires authentication with JWT token.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of animal orders DTOs retrieved successfully."),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access."),
+            @ApiResponse(responseCode = "403", description = "Forbidden access."),
+            @ApiResponse(responseCode = "500", description = "Internal server error.")
+    })
+    @GetMapping("/secured/listdto")
+    public List<AnimalOrderDTO> getAllAnimalOrdersDTOSecured() {
+        return animalOrderService.getOrdersDTO();
+    }
+
+
     //DTO STUFF END
 
 
