@@ -1,0 +1,10 @@
+{
+  "urls": [
+    {
+      "url": "/v3/api-docs",
+      "name": "Testing Custom Config"
+    }
+  ],
+  "customCssUrl": "http://localhost:8080/css/one-dark.css",
+  "apisSorter": "alpha"
+}

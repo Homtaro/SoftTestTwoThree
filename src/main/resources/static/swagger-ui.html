@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Swagger</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui@5.10.0/dist/swagger-ui.css" integrity="sha256-IgNmYaATqY6z6AuD6hvz9XN0OyeAc94gsTa+lK8ka1Y=" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/dark.css">
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui@5.10.0/dist/swagger-ui-bundle.js" integrity="sha256-i050FsZ0MSwm3mVMv7IhpfCdK90RKaXPS/EmiWxv8vc=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/swagger-ui@5.10.0/dist/swagger-ui-standalone-preset.js" integrity="sha256-IGoJVXW7MRyeZOsKceWVePAShfVpJhnYhDhOQp+Yi38=" crossorigin="anonymous"></script>
+<script>
+  // Initialize Swagger UI
+  window.onload = function() {
+    const ui = SwaggerUIBundle({
+      url: "/v3/api-docs",  // Provide the URL to your OpenAPI spec file
+      dom_id: '#swagger-ui',
+      tagsSorter: "alpha",
+      operationsSorter: function(methodA, methodB) {
+        var order = ["get", "post", "put", "delete"];
+        var methodAIndex = order.indexOf(methodA.get("method").toLowerCase());
+        var methodBIndex = order.indexOf(methodB.get("method").toLowerCase());
+        return methodAIndex - methodBIndex;
+      }
+    });
+    window.ui = ui;
+  };
+</script>
+</body>
+</html>
