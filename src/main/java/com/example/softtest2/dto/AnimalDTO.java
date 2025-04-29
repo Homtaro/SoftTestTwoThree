@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class AnimalDTO {
 
-private Long id;
+//private Long id;
 private String animal;
 private String description;
 private Integer quantity;

@@ -1,6 +1,9 @@
 package com.example.softtest2.service;
 
+import com.example.softtest2.dto.AnimalDTO;
 import com.example.softtest2.entity.AnimalEntity;
+import com.example.softtest2.exception.CustomException;
+import com.example.softtest2.model.ErrorCode;
 import com.example.softtest2.repository.AnimalRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +62,7 @@ public class AnimalService {
     }
 
     //Update animal by id
-    @Transactional
+    /*@Transactional
     public void updateAnimal(Long id, AnimalEntity updatedAnimal) {
         animalRepo.findById(id)
                 .ifPresent(animal -> {
@@ -68,6 +71,39 @@ public class AnimalService {
                     animal.setDescription(updatedAnimal.getDescription());
                     animalRepo.save(animal);
                 });
+    }*/
+
+    /*@Transactional
+    public void updateAnimal(Long id, AnimalEntity updatedAnimal) {
+        animalRepo.findById(id)
+                .ifPresentOrElse(
+                        animal -> {
+                            animal.setAnimal(updatedAnimal.getAnimal());
+                            animal.setQuantity(updatedAnimal.getQuantity());
+                            animal.setDescription(updatedAnimal.getDescription());
+                            animalRepo.save(animal);
+                        },
+                        () -> {
+                            throw new CustomException(ErrorCode.ANIMAL_NOT_FOUND);
+                        }
+                );
+    }*/
+
+    @Transactional
+    public void updateAnimal(String id, AnimalDTO updatedAnimal) {
+        Long animalId = Long.valueOf(id);
+        animalRepo.findById(animalId)
+                .ifPresentOrElse(
+                        animal -> {
+                            animal.setAnimal(updatedAnimal.getAnimal());
+                            animal.setQuantity(updatedAnimal.getQuantity());
+                            animal.setDescription(updatedAnimal.getDescription());
+                            animalRepo.save(animal);
+                        },
+                        () -> {
+                            throw new CustomException(ErrorCode.ANIMAL_NOT_FOUND);
+                        }
+                );
     }
 
     //Delete animal by id

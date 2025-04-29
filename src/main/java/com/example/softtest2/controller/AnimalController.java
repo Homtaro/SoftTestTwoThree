@@ -1,14 +1,19 @@
 package com.example.softtest2.controller;
 
 
+import com.example.softtest2.dto.AnimalDTO;
 import com.example.softtest2.entity.AnimalEntity;
+import com.example.softtest2.exception.CustomException;
 import com.example.softtest2.service.AnimalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/animals")
 @Tag(name = "A - Animal Warehouse", description = "Controller for Animal Warehouse")
+@Validated
 public class AnimalController {
 
     private final AnimalService animalService;
@@ -86,7 +92,21 @@ public class AnimalController {
             @ApiResponse(responseCode = "400", description = "Invalid input."),
             @ApiResponse(responseCode = "500", description = "Internal server error.")
     })
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/")
+    @ResponseBody
+    @Valid
+    public AnimalDTO updateAnimal(
+            @Parameter(description = "Animal ID as path || Not Anymore =) ", required = true)
+            //@PathVariable Long id,
+            @RequestParam @Size(min = 10, max = 20) String id,
+            //@RequestParam String id,
+            @Parameter(description = "Updated animal details", required = true)
+            @RequestBody AnimalDTO updatedAnimal) {
+            animalService.updateAnimal(id, updatedAnimal);
+            return new AnimalDTO();
+    }
+
+    /*@PutMapping("/update/{id}")
     public @ResponseBody ResponseEntity<?> updateAnimal(
             @Parameter(description = "Animal ID as path", required = true)
             @PathVariable Long id,
@@ -98,7 +118,7 @@ public class AnimalController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
-    }
+    }*/
 
     // Delete animal by id
     @Operation(summary = "Endpoint for deleting an animal by ID")

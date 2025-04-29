@@ -13,7 +13,4 @@ public class AnimalOrderDTO {
     private Integer quantity;
     private String status;
 
-
-
-
 }
